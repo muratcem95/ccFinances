@@ -8,23 +8,47 @@ const StudentsSchema = new mongoose.Schema({
     },
     ccPayment: {
         type: Number,
-        default: null
+        default: 0
     },
-    school: {
+    received: {
+        type: Number,
+        default: 0
+    },
+    left: {
+        type: Number,
+        default: 0
+    },
+    partnerName: {
         type: String,
         default: null
     },
-    schoolPayment: {
-        type: Number,
-        default: null
-    },
-    thirdParty: {
+    partnerType: {
         type: String,
         default: null
     },
-    thirdPartyPayment: {
+    partnerPayment: {
         type: Number,
+        default: 0
+    },
+    partnerCommissionRate: {
+        type: Number,
+        default: 0
+    },
+    partnerCommissionAmount: {
+        type: Number,
+        default: 0
+    },
+    partnerCommissionStructure: {
+        type: String,
         default: null
+    },
+    partnerReceived: {
+        type: Number,
+        default: 0
+    },
+    partnerLeft: {
+        type: Number,
+        default: 0
     },
     details: {
         type: String,

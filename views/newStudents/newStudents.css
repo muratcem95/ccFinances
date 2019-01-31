@@ -1,0 +1,15 @@
+nav {
+    margin-bottom: 15px;
+}
+#myStudentName:hover {
+    cursor: pointer;
+}
+.stud {
+    background-color: whitesmoke;
+}
+.ccSection {
+    background-color: cadetblue;
+}
+.partnerSection {
+    background-color: coral;
+}

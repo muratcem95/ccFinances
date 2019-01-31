@@ -17,10 +17,6 @@ const PartnersSchema = new mongoose.Schema({
     commissionStructure: {
         type: String,
         required: true
-    },
-    paymentDetails: {
-        type: String,
-        required: true
     }
 });
 

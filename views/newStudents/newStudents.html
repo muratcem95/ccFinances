@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.7/css/jquery.dataTables.min.css">
         <link rel="stylesheet" type="text/css" href="newStudents.css">
         
         <title>C&C Finances | New Students</title>
@@ -18,72 +19,164 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/updates">Updates</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/newStudents">New Students <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/addPartners">Add Partners</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/finances">Finances</a>
-                    </li>
-<!--
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Colleges
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/publicColleges">Public Colleges</a>
-                            <a class="dropdown-item" href="/privateColleges">Private Colleges</a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Universities
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/publicUniversities">Public Universities</a>
-                            <a class="dropdown-item" href="/privateUniversities">Private Universities</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/thirdParties">Third Parties</a>
-                    </li>
--->
                 </ul>
             </div>
         </nav>
         
-<!--
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Toronto</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">GTA</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Montreal</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Vancouver</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Other Cities</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Other Countries</a>
-            </li>    
-        </ul>
--->
+        <form method="post" action="/newStudentForm">
+            <div class="form-group">
+                <input type="text" class="form-control" id="studentName" name="studentName" placeholder="Student Name">
+                <small class="form-text text-muted">Student name has to be unique!</small>
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="ccPayment" name="ccPayment" placeholder="Payment to C&C">
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="received" name="received" placeholder="Already received ... dollars">
+            </div>
+            <div class="form-group">
+                <select class="form-control" id="partnerName" name="partnerName">
+                    <option hidden>Select partner</option>
+                    {{#each partners}}
+                        <option>{{partnerName}}</option>
+                    {{else}}
+                        <option>There are no partners to select.</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="partnerPayment" name="partnerPayment" placeholder="Amount paid to the partner">
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control" id="partnerReceived" name="partnerReceived" placeholder="Amount already received by the partner">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" id="details" name="details" placeholder="Details"></textarea>
+                <small class="form-text text-muted">Any other details you would like to share?</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        
+        <div class="container">
+            <div id="myStudents">
+                <h3 class="text-center">My Students</h3>
+                <p><button id="btn-export" class="btn">Export</button></p>
+                <table class="table table-hover text-center by_date" id="example" class="display">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="stud">Student name</th>
+                            <th scope="col" class="ccSection">Payment to C&C</th>
+                            <th scope="col" class="ccSection">Received</th>
+                            <th scope="col" class="partnerSection">Partner name</th>
+                            <th scope="col" class="partnerSection">Our commission from the partner</th>
+                            <th scope="col" class="partnerSection">Received from the partner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each students}}
+                            <tr>
+                                {{#if this.left}}
+                                    <th scope="row" id="myStudentName" data-toggle="modal" data-target="#myModal" data-studentname="{{studentName}}" data-ccpayment="{{ccPayment}}" data-received="{{received}}" data-left="{{left}}" data-partnername="{{partnerName}}" data-partnertype="{{partnerType}}" data-partnerpayment="{{partnerPayment}}" data-partnercommissionrate="{{partnerCommissionRate}}" data-partnercommissionamount="{{partnerCommissionAmount}}" data-partnercommissionstructure="{{partnerCommissionStructure}}" data-partnerreceived="{{partnerReceived}}" data-partnerleft="{{partnerLeft}}" data-details="{{details}}" style="color: red;">{{studentName}}</th>
+                                {{else}}
+                                    {{#if this.partnerLeft}}
+                                        <th scope="row" id="myStudentName" data-toggle="modal" data-target="#myModal" data-studentname="{{studentName}}" data-ccpayment="{{ccPayment}}" data-received="{{received}}" data-left="{{left}}" data-partnername="{{partnerName}}" data-partnertype="{{partnerType}}" data-partnerpayment="{{partnerPayment}}" data-partnercommissionrate="{{partnerCommissionRate}}" data-partnercommissionamount="{{partnerCommissionAmount}}" data-partnercommissionstructure="{{partnerCommissionStructure}}" data-partnerreceived="{{partnerReceived}}" data-partnerleft="{{partnerLeft}}" data-details="{{details}}" style="color: red;">{{studentName}}</th>
+                                    {{else}}
+                                        <th scope="row" id="myStudentName" data-toggle="modal" data-target="#myModal" data-studentname="{{studentName}}" data-ccpayment="{{ccPayment}}" data-received="{{received}}" data-left="{{left}}" data-partnername="{{partnerName}}" data-partnertype="{{partnerType}}" data-partnerpayment="{{partnerPayment}}" data-partnercommissionrate="{{partnerCommissionRate}}" data-partnercommissionamount="{{partnerCommissionAmount}}" data-partnercommissionstructure="{{partnerCommissionStructure}}" data-partnerreceived="{{partnerReceived}}" data-partnerleft="{{partnerLeft}}" data-details="{{details}}">{{studentName}}</th>
+                                    {{/if}}
+                                {{/if}}
+                                
+                                <td class="ccSection" id="ccPaymentCalc">{{ccPayment}}</td>
+                                <td class="ccSection" id="receivedCalc">{{received}}</td>
+                                <td class="partnerSection">{{partnerName}}</td>
+                                <td class="partnerSection" id="partnerCommissionAmountCalc">{{partnerCommissionAmount}}</td>
+                                <td class="partnerSection" id="partnerReceivedCalc">{{partnerReceived}}</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Edit/Delete Student</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><b>Student name:</b> <span id="modal-studentname"></span></p>
+                        <p><b>Amount owed to C&C:</b> <span id="modal-ccpayment"></span></p>
+                        <p><b>Amount received:</b> <span id="modal-received"></span></p>
+                        <p class="ccSection"><b>Amount left:</b> <span id="modal-left"></span></p>
+                        <form method="post" action="/editStudentCcForm">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" class="form-control form-control-sm" id="editStudentName" name="studentToEditCc" placeholder="Student's name">
+                                </div>
+                                <div class="col">
+                                    <input type="number" class="form-control form-control-sm" id="receivedEdit" name="receivedEdit" placeholder="New received">
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-sm btn-primary">Edit Cc Received</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <p><b>Partner name:</b> <span id="modal-partnername"></span></p>
+                        <p><b>Partner type:</b> <span id="modal-partnertype"></span></p>
+                        <p><b>Payment to the partner:</b> <span id="modal-partnerpayment"></span></p>
+                        <p><b>Partner Commission Rate:</b> <span id="modal-partnercommissionrate"></span>%</p>
+                        <p><b>Partner Commission Amount:</b> <span id="modal-partnercommissionamount"></span></p>
+                        <p><b>Partner Commission Structure:</b> <span id="modal-partnercommissionstructure"></span></p>
+                        <p><b>Amount received from the partner:</b> <span id="modal-partnerreceived"></span></p>
+                        <p class="partnerSection"><b>Amount left:</b> <span id="modal-partnerleft"></span></p>
+                        <form method="post" action="/editStudentPartnerForm">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" class="form-control form-control-sm" id="editStudentName" name="studentToEditPartner" placeholder="Student's name">
+                                </div>
+                                <div class="col">
+                                    <input type="number" class="form-control form-control-sm" id="partnerReceivedEdit" name="partnerReceivedEdit" placeholder="New received">
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-sm btn-primary">Edit Partner Received</button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+                        <p><b>Details:</b> <span id="modal-details"></span></p>
+                        <hr>
+                        <form method="post" action="/deleteStudentForm">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" class="form-control" name="studentToDelete">
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>    
+                        </form>  
+                    </div>    
+                </div>
+            </div>
+        </div>
         
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+        <script src="../tableJs/jquery.table2excel.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src="newStudents.js" type="text/javascript"></script>
+        <script src="../tableJs/tablejs.js" type="text/javascript"></script>
     </body>
 </html>
