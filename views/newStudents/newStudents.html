@@ -91,10 +91,30 @@
                                 {{/if}}
                                 
                                 <td class="ccSection" id="ccPaymentCalc">{{ccPayment}}</td>
-                                <td class="ccSection" id="receivedCalc">{{received}}</td>
+                                <td class="ccSection" id="receivedCalc">{{received}}<br>
+                                    <form id="editStudentCcForm" method="post" action="/editStudentCcForm">
+                                        <input type="text" class="form-control form-control-sm" name="studentToEditCc" value="{{studentName}}" hidden>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" class="form-control" id="receivedEdit" name="receivedEdit" placeholder="New received">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary" type="submit">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>    
+                                </td>
                                 <td class="partnerSection">{{partnerName}}</td>
                                 <td class="partnerSection" id="partnerCommissionAmountCalc">{{partnerCommissionAmount}}</td>
-                                <td class="partnerSection" id="partnerReceivedCalc">{{partnerReceived}}</td>
+                                <td class="partnerSection" id="partnerReceivedCalc">{{partnerReceived}}
+                                    <form id="editStudentPartnerForm" method="post" action="/editStudentPartnerForm">
+                                        <input type="text" class="form-control form-control-sm" name="studentToEditPartner" value="{{studentName}}" hidden>
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" class="form-control" id="partnerReceivedEdit" name="partnerReceivedEdit" placeholder="New received">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-secondary" type="submit">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>  
+                                </td>
                             </tr>
                         {{/each}}
                     </tbody>
@@ -106,7 +126,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalCenterTitle">Edit/Delete Student</h5>
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Student Info</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -117,19 +137,6 @@
                         <p><b>Amount received:</b> <span id="modal-received"></span></p>
                         <p><b>Details:</b> <span id="modal-details"></span></p>
                         <p class="ccSection"><b>Amount left:</b> <span id="modal-left"></span></p>
-                        <form method="post" action="/editStudentCcForm">
-                            <div class="row">
-                                <div class="col">
-                                    <input type="text" class="form-control form-control-sm" id="editStudentName" name="studentToEditCc" placeholder="Student's name">
-                                </div>
-                                <div class="col">
-                                    <input type="number" class="form-control form-control-sm" id="receivedEdit" name="receivedEdit" placeholder="New received">
-                                </div>
-                                <div class="col">
-                                    <button type="submit" class="btn btn-sm btn-primary">Edit Cc Received</button>
-                                </div>
-                            </div>
-                        </form>
                         <hr>
                         <p><b>Partner name:</b> <span id="modal-partnername"></span></p>
                         <p><b>Partner type:</b> <span id="modal-partnertype"></span></p>
@@ -139,24 +146,11 @@
                         <p><b>Partner Commission Structure:</b> <span id="modal-partnercommissionstructure"></span></p>
                         <p><b>Amount received from the partner:</b> <span id="modal-partnerreceived"></span></p>
                         <p class="partnerSection"><b>Amount left:</b> <span id="modal-partnerleft"></span></p>
-                        <form method="post" action="/editStudentPartnerForm">
-                            <div class="row">
-                                <div class="col">
-                                    <input type="text" class="form-control form-control-sm" id="editStudentName" name="studentToEditPartner" placeholder="Student's name">
-                                </div>
-                                <div class="col">
-                                    <input type="number" class="form-control form-control-sm" id="partnerReceivedEdit" name="partnerReceivedEdit" placeholder="New received">
-                                </div>
-                                <div class="col">
-                                    <button type="submit" class="btn btn-sm btn-primary">Edit Partner Received</button>
-                                </div>
-                            </div>
-                        </form>
                         <hr>
                         <form method="post" action="/deleteStudentForm">
                             <div class="row">
                                 <div class="col">
-                                    <input type="text" class="form-control" name="studentToDelete">
+                                    <input type="text" class="form-control" name="studentToDelete" placeholder="Name of the student">
                                 </div>
                                 <div class="col">
                                     <button type="submit" class="btn btn-danger">Delete</button>
