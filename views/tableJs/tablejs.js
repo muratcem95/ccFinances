@@ -11,7 +11,7 @@ $(document).ready(function(){
 });
 
 // data-* attributes to scan when populating modal values
-var ATTRIBUTES = ['studentname', 'ccpayment', 'received', 'left', 'partnername', 'partnertype', 'partnerpayment', 'partnercommissionrate', 'partnercommissionamount', 'partnercommissionstructure', 'partnerreceived', 'partnerleft', 'details'];
+var ATTRIBUTES = ['studentname', 'ccpayment', 'received', 'left', 'partnername', 'partnertype', 'partnerpayment', 'partnercommissionrate', 'partnercommissionamount', 'partnercommissionstructure', 'partnerreceived', 'partnerleft', 'details', 'partnerpartnername'];
 
 $('[data-toggle="modal"]').on('click', function (e) {
   // convert target (e.g. the button) to jquery object

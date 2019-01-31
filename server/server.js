@@ -121,6 +121,15 @@ app.post('/addPartnerForm', (req, res) => {
     }).catch((e) => res.send("Partner can not be added. Please try again later."));
 });
 
+app.post('/deletePartnerForm', (req, res) => {
+    Partners.findOneAndDelete({partnerName: req.body.partnerToDelete}).then((partner) => {
+        if(!partner) {
+            res.send("Deleting did not happen.<br>Name could not be found!");
+        };
+        res.redirect('/addPartners');
+    }).catch((e) => res.send("Deleting did not happen. Can not find one and delete."));
+});
+
 //IO CONNECTIONS
 io.on('connection', (socket) => {
     console.log('New user connected.');
