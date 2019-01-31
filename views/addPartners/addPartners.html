@@ -87,18 +87,20 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <p><b>Partner name:</b> <span id="modal-partnerpartnername"></span></p>
-                    <hr>
-                    <form method="post" action="/deletePartnerForm">
-                        <div class="row">
-                            <div class="col">
-                                <input type="text" class="form-control" name="partnerToDelete">
-                            </div>
-                            <div class="col">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </div>
-                        </div>    
-                    </form>  
+                    <div class="modal-body">
+                        <p><b>Partner name:</b> <span id="modal-partnerpartnername"></span></p>
+                        <hr>
+                        <form method="post" action="/deletePartnerForm">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="text" class="form-control" name="partnerToDelete">
+                                </div>
+                                <div class="col">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </div>
+                            </div>    
+                        </form>  
+                </div>
                 </div>    
             </div>
         </div>
